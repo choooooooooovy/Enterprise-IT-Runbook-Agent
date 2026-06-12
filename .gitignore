@@ -1,0 +1,42 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Environment variables / secrets
+.env
+.env.*
+!.env.example
+
+# Node / Next.js
+node_modules/
+.next/
+out/
+dist/
+build/
+
+# Logs
+logs/
+*.log
+
+# Local datasets and caches
+data/reference/huggingface/
+data/reference/raw_repos/
+data/reference/exports/
+data/raw/
+data/cache/
+.cache/
+.huggingface/
+
+# Vector DB / local indexes
+data/vectorstores/
+chroma/
+faiss_index/
+
+# OS / IDE
+.DS_Store
+.vscode/
+.idea/
