@@ -46,4 +46,5 @@ python scripts/validate_synthetic_dataset.py
 ```
 
 Local Hugging Face source datasets and exports are stored under
-`data/reference/` and must not be committed to Git.
+`data/reference/` and must not be committed to Git. They are reference-only
+inputs used to design the Korean synthetic dataset and Runbook structure.

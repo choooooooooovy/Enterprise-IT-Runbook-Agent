@@ -59,7 +59,7 @@ Project v2 will improve the Agent using measured behavior and failure analysis:
 - prompt and workflow improvement
 - reproducible evaluation report
 
-## 6. Naming Rule
+## 6. Naming Rules
 
 Project version names refer to whole-project maturity. They must not be used as
 ad hoc labels for a dataset refinement, document revision, or branch that is
@@ -69,7 +69,10 @@ Current dataset and Runbook outputs belong to Project v0. Dataset iterations
 inside the same project stage should use descriptive names such as `draft`,
 `baseline`, or a dated revision when preservation is necessary.
 
-### Branch Management Rule
+Project v1 is reserved for the future Minimum Agent Workflow implementation.
+The current foundation dataset must not be described as "dataset v1."
+
+## 7. Branch Management Rules
 
 - Work on one task-specific branch at a time.
 - Do not push directly to `main`.
