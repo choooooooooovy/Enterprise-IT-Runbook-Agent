@@ -2,11 +2,13 @@
 
 ## 1. 목적과 범위
 
-`korean_it_issues_v0.jsonl`과 `korean_it_issues_v1.jsonl`은 Enterprise IT
-Runbook Agent의 초기 평가를 위한 한국어 합성 issue set이다. 운영 사실을
-재현하는 학습 데이터가 아니라, 다음 workflow의 분류·검색·판단·구조 준수
-여부를 점검하는 draft다. v0는 최초 baseline이고 v1은 Runbook 매핑과 평가
-분포를 정제한 버전이다.
+`korean_it_issues_v0.jsonl`은 Enterprise IT Runbook Agent의 Project v0
+평가를 위한 한국어 합성 issue set이다. 운영 사실을 재현하는 학습 데이터가
+아니라, 향후 Project v1에서 구현할 workflow의 분류·검색·판단·구조 준수
+여부를 점검하기 위한 기반 데이터다.
+
+`korean_it_issues_draft.jsonl`은 현재 Project v0 평가셋을 만들기 전의
+baseline 보관본이며 기본 검증 대상이 아니다.
 
 ```text
 Issue Intake
@@ -172,9 +174,9 @@ severity, escalation, missing information, single/multiple-user impact를 섞는
 각 case는 적어도 하나의 reference source를 기록하지만, 이는 원문 provenance가
 아니라 어떤 구조적 패턴을 참고했는지를 나타낸다.
 
-### v1 Distribution
+### Project v0 Distribution
 
-v1의 실제 분포는 다음과 같다.
+현재 Project v0 평가셋의 실제 분포는 다음과 같다.
 
 | Dimension | Distribution |
 | --- | --- |
@@ -196,4 +198,5 @@ case는 VPN, MFA, Email, Network, SaaS Access, Security category에 포함한다
 - 정답 label이 description에 그대로 노출되지 않도록 하되 판단 근거는 제공한다.
 - 서로 다른 case가 같은 문장 템플릿의 숫자만 바꾼 형태가 되지 않게 한다.
 - 원본 reference row, 인명, 이메일, URL, IP를 복사하지 않는다.
-- v0와 v1은 수동 검토 전제의 초안이며 production benchmark로 간주하지 않는다.
+- Project v0 평가셋은 수동 검토 전제의 초안이며 production benchmark로
+  간주하지 않는다.

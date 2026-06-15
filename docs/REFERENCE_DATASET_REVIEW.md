@@ -2,7 +2,9 @@
 
 이 문서는 로컬에 내려받은 공개 Hugging Face 데이터셋을 구조 참고용으로
 검토한 결과다. 원본 행을 프로젝트 데이터로 복제하거나 번역하지 않으며,
-한국어 Runbook과 synthetic issue/eval set을 설계하기 위한 패턴만 사용한다.
+Project v0의 한국어 Runbook과 synthetic issue/eval set을 설계하기 위한
+패턴만 사용한다. 이 검토는 Agent 구현이 아니라 Dataset & Runbook Foundation
+단계의 산출물이다.
 
 ## 1. mindweave/help-desk-tickets
 
