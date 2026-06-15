@@ -1,0 +1,358 @@
+{
+  "purpose": "Compact pattern summary for designing Korean runbooks and a synthetic evaluation set. This is not a raw-data export.",
+  "datasets": {
+    "mindweave/help-desk-tickets": {
+      "local_directory": "data/reference/huggingface/mindweave_help-desk-tickets",
+      "license": "cc-by-nc-4.0",
+      "files": [
+        {
+          "path": "data/reference/huggingface/mindweave_help-desk-tickets/data/agents.csv",
+          "rows": 10,
+          "columns": [
+            "id",
+            "name",
+            "team"
+          ]
+        },
+        {
+          "path": "data/reference/huggingface/mindweave_help-desk-tickets/data/categories.csv",
+          "rows": 8,
+          "columns": [
+            "id",
+            "name",
+            "service"
+          ]
+        },
+        {
+          "path": "data/reference/huggingface/mindweave_help-desk-tickets/data/comments.csv",
+          "rows": 2000,
+          "columns": [
+            "comment_id",
+            "ticket_id",
+            "agent_id",
+            "created_at",
+            "visibility",
+            "team",
+            "body"
+          ]
+        },
+        {
+          "path": "data/reference/huggingface/mindweave_help-desk-tickets/data/sla_breaches.csv",
+          "rows": 1249,
+          "columns": [
+            "breach_id",
+            "ticket_id",
+            "breach_type",
+            "sla_target_hours",
+            "actual_hours",
+            "breach_minutes"
+          ]
+        },
+        {
+          "path": "data/reference/huggingface/mindweave_help-desk-tickets/data/tickets.csv",
+          "rows": 1000,
+          "columns": [
+            "ticket_id",
+            "created_at",
+            "first_response_at",
+            "resolved_at",
+            "priority",
+            "status",
+            "channel",
+            "category_id",
+            "assigned_agent_id",
+            "requester_department",
+            "affected_service",
+            "summary",
+            "description",
+            "escalated",
+            "outage_related"
+          ]
+        }
+      ],
+      "total_rows_across_files": 4267,
+      "detected_columns": [
+        "actual_hours",
+        "affected_service",
+        "agent_id",
+        "assigned_agent_id",
+        "body",
+        "breach_id",
+        "breach_minutes",
+        "breach_type",
+        "category_id",
+        "channel",
+        "comment_id",
+        "created_at",
+        "description",
+        "escalated",
+        "first_response_at",
+        "id",
+        "name",
+        "outage_related",
+        "priority",
+        "requester_department",
+        "resolved_at",
+        "service",
+        "sla_target_hours",
+        "status",
+        "summary",
+        "team",
+        "ticket_id",
+        "visibility"
+      ],
+      "sample_categories": {
+        "category_id": [
+          "2",
+          "7",
+          "1",
+          "6",
+          "3"
+        ],
+        "affected_service": [
+          "endpoint",
+          "security",
+          "identity",
+          "peripherals",
+          "network"
+        ],
+        "service": [
+          "identity",
+          "endpoint",
+          "network",
+          "saas",
+          "business-apps"
+        ],
+        "category_name": [
+          "Access Management",
+          "Laptop / Endpoint",
+          "Network & VPN",
+          "Email & Collaboration",
+          "ERP / WMS"
+        ]
+      },
+      "sample_priorities_or_severities": {
+        "priority": [
+          "P3",
+          "P4",
+          "P2",
+          "P1"
+        ]
+      },
+      "sample_issue_text": {
+        "summary": [
+          "New Zebra printer not visible to shipping station.",
+          "Sales laptop webcam missing from device manager.",
+          "Outlook keeps prompting for password on Mac."
+        ],
+        "description": [
+          "New Zebra printer not visible to shipping station. Reported by Danielle from HR.",
+          "Sales laptop webcam missing from device manager. Reported by Angel from Warehouse.",
+          "Outlook keeps prompting for password on Mac. Reported by Joshua from Warehouse."
+        ],
+        "body": [
+          "Issue now limited to users on macOS Sonoma.",
+          "Confirmed issue reproducible on spare device.",
+          "MFA re-registration completed successfully."
+        ]
+      },
+      "possible_escalation_values": {
+        "escalated": [
+          "False",
+          "True"
+        ],
+        "outage_related": [
+          "False"
+        ],
+        "breach_type": [
+          "resolution"
+        ],
+        "sla_target_hours": [
+          "24",
+          "72",
+          "8",
+          "4"
+        ]
+      },
+      "possible_comment_or_conversation_structure": {
+        "detected_fields": [
+          "body",
+          "visibility",
+          "team",
+          "ticket_id"
+        ],
+        "conversation_summary": null
+      }
+    },
+    "bdragun/service-desk-tickets": {
+      "local_directory": "data/reference/huggingface/bdragun_service-desk-tickets",
+      "license": null,
+      "files": [
+        {
+          "path": "data/reference/huggingface/bdragun_service-desk-tickets/data/test-00000-of-00001.parquet",
+          "rows": 178,
+          "columns": [
+            "conversations",
+            "source_id",
+            "source_type",
+            "category"
+          ]
+        },
+        {
+          "path": "data/reference/huggingface/bdragun_service-desk-tickets/data/train-00000-of-00001.parquet",
+          "rows": 711,
+          "columns": [
+            "conversations",
+            "source_id",
+            "source_type",
+            "category"
+          ]
+        }
+      ],
+      "total_rows_across_files": 889,
+      "detected_columns": [
+        "category",
+        "conversations",
+        "source_id",
+        "source_type"
+      ],
+      "sample_categories": {
+        "category": [
+          "knowledge-base",
+          "access-request",
+          "software",
+          "hardware",
+          "network"
+        ],
+        "source_type": [
+          "ticket",
+          "qrg"
+        ]
+      },
+      "sample_priorities_or_severities": {
+        "derived_from_conversation_text": [
+          "Medium",
+          "High",
+          "Low",
+          "Critical"
+        ]
+      },
+      "sample_issue_text": {},
+      "possible_escalation_values": {
+        "conversation_keyword_counts": {
+          "escalat": 104,
+          "sla": 39,
+          "outage": 8
+        }
+      },
+      "possible_comment_or_conversation_structure": {
+        "detected_fields": [
+          "conversations",
+          "source_id",
+          "source_type"
+        ],
+        "conversation_summary": {
+          "format": "JSON-encoded list of role/content message objects",
+          "message_roles": {
+            "assistant": 889,
+            "system": 889,
+            "user": 889
+          },
+          "messages_per_conversation": [
+            3
+          ],
+          "source_types": [
+            "ticket",
+            "qrg"
+          ],
+          "sample_source_ids": [
+            "QRG-013",
+            "QRG-015",
+            "QRG-012",
+            "QRG-014",
+            "QRG-011"
+          ],
+          "sample_user_prompts": [
+            "A user needs help with prerequisites. What do I tell them?",
+            "How do I prerequisites?",
+            "What steps should I follow for: Cannot log in to Entra ID after password change?"
+          ],
+          "priority_mentions": {
+            "Medium": 210,
+            "High": 135,
+            "Low": 75,
+            "Critical": 65
+          },
+          "escalation_keyword_counts": {
+            "escalat": 104,
+            "sla": 39,
+            "outage": 8
+          }
+        }
+      }
+    },
+    "Console-AI/IT-helpdesk-synthetic-tickets": {
+      "local_directory": "data/reference/huggingface/Console-AI_IT-helpdesk-synthetic-tickets",
+      "license": "mit",
+      "files": [
+        {
+          "path": "data/reference/huggingface/Console-AI_IT-helpdesk-synthetic-tickets/tickets.csv",
+          "rows": 500,
+          "columns": [
+            "id",
+            "subject",
+            "description",
+            "priority",
+            "category",
+            "createdAt",
+            "requesterEmail"
+          ]
+        }
+      ],
+      "total_rows_across_files": 500,
+      "detected_columns": [
+        "category",
+        "createdAt",
+        "description",
+        "id",
+        "priority",
+        "requesterEmail",
+        "subject"
+      ],
+      "sample_categories": {
+        "category": [
+          "Software",
+          "Account",
+          "Network",
+          "Security",
+          "Communication"
+        ]
+      },
+      "sample_priorities_or_severities": {
+        "priority": [
+          "Medium",
+          "High",
+          "Low",
+          "Urgent"
+        ]
+      },
+      "sample_issue_text": {
+        "subject": [
+          "Hey IT! Our network printer keeps disconnecting.",
+          "Re: [Acme IT] Re: Ticket #98765 - Access Issue with Shared Network Drive",
+          "Software Conflict Causing App Crashes"
+        ],
+        "description": [
+          "Hey IT! Our network printer keeps disconnecting intermittently and requires manual IP reconfiguration each time. It's becoming quite a hassl",
+          "This is a follow-up to your previous request #98765 \"Access Issue with Shared Network Drive\" Hello! I'm having trouble accessing the shared ",
+          "Hey team! :wave: We're experiencing some intermittent crashes on specific user machines. It seems like there might be a software conflict. C"
+        ]
+      },
+      "possible_escalation_values": {},
+      "possible_comment_or_conversation_structure": {
+        "detected_fields": [],
+        "conversation_summary": null
+      }
+    }
+  }
+}
