@@ -11,9 +11,12 @@ RAG pipeline은 issue의 category와 핵심 증상을 바탕으로 관련 Runboo
 `Verification`에 근거한 대응 계획을 생성한다. escalation 조건에 해당하면
 수집한 정보와 수행 결과를 소유 팀에 전달해야 한다.
 
-`data/eval_sets/korean_it_issues_v0.jsonl`과
-`data/eval_sets/korean_it_issues_v1.jsonl`의 각 case는
+`data/eval_sets/korean_it_issues_v0.jsonl`의 각 case는
 `expected_runbook_id`와 `expected_runbook_title`로 이 폴더의 문서 하나를
-가리킨다. v1의 Hardware case는 RB-011에 매핑되고, category가 불명확한
-incident만 RB-010 일반 escalation 정책을 사용한다. 현재 문서는 draft이며
-실제 조직의 도구, 승인 정책, SLA, 연락 체계에 맞춘 수동 검토가 필요하다.
+가리킨다. Hardware case는 RB-011에 매핑되고, category가 불명확한 incident만
+RB-010 일반 escalation 정책을 사용한다.
+
+이 Runbook과 평가셋은 모두 Project v0 foundation 산출물이다. Project v1에서
+구현할 Minimum Agent Workflow가 이 문서들을 검색 지식으로 사용하게 된다.
+현재 문서는 draft이며 실제 조직의 도구, 승인 정책, SLA, 연락 체계에 맞춘
+수동 검토가 필요하다.

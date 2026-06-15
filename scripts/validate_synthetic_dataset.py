@@ -14,7 +14,7 @@ from typing import Any
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_DATASET_PATH = (
-    PROJECT_ROOT / "data" / "eval_sets" / "korean_it_issues_v1.jsonl"
+    PROJECT_ROOT / "data" / "eval_sets" / "korean_it_issues_v0.jsonl"
 )
 RUNBOOK_ROOT = PROJECT_ROOT / "data" / "runbooks"
 
@@ -74,7 +74,7 @@ def parse_args() -> argparse.Namespace:
         default=DEFAULT_DATASET_PATH,
         help=(
             "Dataset to validate "
-            "(default: data/eval_sets/korean_it_issues_v1.jsonl)."
+            "(default: data/eval_sets/korean_it_issues_v0.jsonl)."
         ),
     )
     return parser.parse_args()

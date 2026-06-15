@@ -1,14 +1,15 @@
 # Korean IT Synthetic Issue/Eval Set
 
-이 폴더는 Enterprise IT Runbook Agent의 초기 동작을 평가하기 위한 한국어
-합성 issue set을 담는다.
+이 폴더는 Enterprise IT Runbook Agent의 Project v0 평가 기반으로 사용할
+한국어 합성 issue set을 담는다.
 
-- `korean_it_issues_v0.jsonl`: 최초 baseline 30건
-- `korean_it_issues_v1.jsonl`: Hardware Runbook 매핑과 severity, escalation,
-  missing-information 분포를 정제한 30건
+- `korean_it_issues_v0.jsonl`: 현재 공식 Project v0 평가셋 30건
+- `korean_it_issues_draft.jsonl`: 정제 전 baseline 보관본 30건
 
 실제 사용자 ticket이나 Hugging Face 원본 행을 번역한 데이터가 아니며,
-현실적인 helpdesk 패턴을 참고해 프로젝트 용도에 맞게 새로 작성한 draft다.
+현실적인 helpdesk 패턴을 참고해 프로젝트 용도에 맞게 새로 작성한 합성
+draft다. Project v1은 이 데이터셋의 revision 이름이 아니라 앞으로 구현할
+Minimum Agent Workflow 단계다.
 
 구조 참고에 사용한 reference dataset:
 
@@ -25,7 +26,7 @@ escalation 판단, owner team routing, JSON schema 준수를 평가한다. 각 c
 수 있는지 여부다. `false`이면 `IT 헬프데스크`가 표준 절차로 처리하고,
 `true`이면 `expected_owner_team`의 전문팀 또는 상위 대응 프로세스로 전달한다.
 
-v1 실제 분포:
+Project v0 평가셋 실제 분포:
 
 - Severity: Low 9, Medium 8, High 9, Critical 4
 - Escalation: true 15, false 15
