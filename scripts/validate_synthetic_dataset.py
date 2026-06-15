@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import argparse
 import json
 import re
 import sys
@@ -12,7 +13,9 @@ from typing import Any
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-DATASET_PATH = PROJECT_ROOT / "data" / "eval_sets" / "korean_it_issues_v0.jsonl"
+DEFAULT_DATASET_PATH = (
+    PROJECT_ROOT / "data" / "eval_sets" / "korean_it_issues_v1.jsonl"
+)
 RUNBOOK_ROOT = PROJECT_ROOT / "data" / "runbooks"
 
 REQUIRED_FIELDS = {
@@ -61,6 +64,22 @@ ALLOWED_REFERENCE_SOURCES = {
 }
 
 
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        description="Validate a Korean synthetic IT issue/evaluation JSONL file."
+    )
+    parser.add_argument(
+        "--file",
+        type=Path,
+        default=DEFAULT_DATASET_PATH,
+        help=(
+            "Dataset to validate "
+            "(default: data/eval_sets/korean_it_issues_v1.jsonl)."
+        ),
+    )
+    return parser.parse_args()
+
+
 def load_runbooks() -> dict[str, str]:
     runbooks = {}
     for path in sorted(RUNBOOK_ROOT.glob("RB-*.md")):
@@ -75,14 +94,16 @@ def load_runbooks() -> dict[str, str]:
     return runbooks
 
 
-def load_jsonl(errors: list[str]) -> list[tuple[int, dict[str, Any]]]:
+def load_jsonl(
+    dataset_path: Path, errors: list[str]
+) -> list[tuple[int, dict[str, Any]]]:
     records = []
-    if not DATASET_PATH.exists():
-        errors.append(f"Dataset does not exist: {DATASET_PATH}")
+    if not dataset_path.exists():
+        errors.append(f"Dataset does not exist: {dataset_path}")
         return records
 
     for line_number, raw_line in enumerate(
-        DATASET_PATH.read_text(encoding="utf-8").splitlines(), start=1
+        dataset_path.read_text(encoding="utf-8").splitlines(), start=1
     ):
         if not raw_line.strip():
             continue
@@ -183,9 +204,13 @@ def validate_record(
 
 
 def main() -> int:
+    args = parse_args()
+    dataset_path = (
+        args.file if args.file.is_absolute() else PROJECT_ROOT / args.file
+    ).resolve()
     errors: list[str] = []
     runbooks = load_runbooks()
-    records = load_jsonl(errors)
+    records = load_jsonl(dataset_path, errors)
 
     for line_number, record in records:
         validate_record(line_number, record, runbooks, errors)
@@ -219,29 +244,64 @@ def main() -> int:
     escalation_counts = Counter(
         record.get("expected_escalation") for _, record in records
     )
+    missing_information_lengths = Counter(
+        len(record.get("expected_missing_info"))
+        for _, record in records
+        if isinstance(record.get("expected_missing_info"), list)
+    )
+    runbook_mapping_counts = Counter(
+        record.get("expected_runbook_id") for _, record in records
+    )
+    mapped_runbooks = set(runbook_mapping_counts) & set(runbooks)
+    unused_runbooks = sorted(set(runbooks) - mapped_runbooks)
+
+    try:
+        display_path = dataset_path.relative_to(PROJECT_ROOT)
+    except ValueError:
+        display_path = dataset_path
 
     print("Synthetic dataset validation")
-    print(f"- Dataset: {DATASET_PATH.relative_to(PROJECT_ROOT)}")
-    print(f"- Parsed cases: {len(records)}")
+    print(f"- Dataset: {display_path}")
+    print(f"- Total cases: {len(records)}")
     print(f"- Discovered runbooks: {len(runbooks)}")
     print(
-        "- Categories: "
+        "- Category distribution: "
         + ", ".join(
             f"{category}={category_counts[category]}"
             for category in EXPECTED_CATEGORY_COUNTS
         )
     )
     print(
-        "- Severities: "
+        "- Severity distribution: "
         + ", ".join(
             f"{severity}={severity_counts[severity]}"
             for severity in ("Low", "Medium", "High", "Critical")
         )
     )
     print(
-        f"- Escalation: true={escalation_counts[True]}, "
+        f"- Escalation distribution: true={escalation_counts[True]}, "
         f"false={escalation_counts[False]}"
     )
+    print(
+        "- Missing information length distribution: "
+        + ", ".join(
+            f"{length}={count}"
+            for length, count in sorted(missing_information_lengths.items())
+        )
+    )
+    print(
+        f"- Runbook mapping coverage: {len(mapped_runbooks)}/{len(runbooks)} "
+        f"runbooks used"
+    )
+    print(
+        "  "
+        + ", ".join(
+            f"{runbook_id}={runbook_mapping_counts[runbook_id]}"
+            for runbook_id in sorted(mapped_runbooks)
+        )
+    )
+    if unused_runbooks:
+        print(f"  Unused runbooks: {', '.join(unused_runbooks)}")
 
     if errors:
         print(f"- Result: FAIL ({len(errors)} errors)")

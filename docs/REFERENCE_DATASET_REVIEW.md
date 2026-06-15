@@ -79,7 +79,8 @@
     정답 label로 간주하면 안 된다.
   - README에 license가 선언되어 있지 않아 재사용 조건을 별도로 확인해야 한다.
 - License / usage note:
-  - 로컬 README와 metadata에 license 선언이 없다.
+  - 2026-06-15 재확인 기준, 로컬 README front matter와 Hugging Face 공식
+    dataset API의 `cardData`/tags 모두 license를 선언하지 않는다.
   - 불명확한 license 때문에 원문이나 답변을 파생 데이터에 복사하지 않고,
     QRG/ticket 구분과 절차형 응답 패턴만 참고한다.
 
