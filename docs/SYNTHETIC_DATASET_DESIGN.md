@@ -2,9 +2,11 @@
 
 ## 1. 목적과 범위
 
-`korean_it_issues_v0.jsonl`은 Enterprise IT Runbook Agent의 초기 평가를 위한
-한국어 합성 issue set이다. 운영 사실을 재현하는 학습 데이터가 아니라,
-다음 workflow의 분류·검색·판단·구조 준수 여부를 점검하는 v0 draft다.
+`korean_it_issues_v0.jsonl`과 `korean_it_issues_v1.jsonl`은 Enterprise IT
+Runbook Agent의 초기 평가를 위한 한국어 합성 issue set이다. 운영 사실을
+재현하는 학습 데이터가 아니라, 다음 workflow의 분류·검색·판단·구조 준수
+여부를 점검하는 draft다. v0는 최초 baseline이고 v1은 Runbook 매핑과 평가
+분포를 정제한 버전이다.
 
 ```text
 Issue Intake
@@ -32,7 +34,7 @@ Reference dataset은 ticket 구조와 표현 패턴만 제공한다. 각 case는
 | `expected_severity` | enum | `Low`, `Medium`, `High`, `Critical` 중 하나 |
 | `expected_runbook_id` | string | `data/runbooks`에 존재하는 Runbook ID |
 | `expected_runbook_title` | string | 검색되어야 할 Runbook의 한국어 제목 |
-| `expected_escalation` | boolean | 담당 전문팀 또는 상위 대응 필요 여부 |
+| `expected_escalation` | boolean | 1차 헬프데스크가 직접 처리하지 않고 전문팀 또는 상위 프로세스로 전달해야 하는지 여부 |
 | `expected_owner_team` | enum | 허용 owner team 중 하나 |
 | `expected_missing_info` | string[] | 판단/조치 전에 추가로 필요한 정보 |
 | `reference_sources` | string[] | 패턴 설계에 참고한 reference dataset ID |
@@ -105,7 +107,7 @@ IAM팀
 
 ## 4. Runbook Mapping
 
-| Category | Primary Runbook | Default Owner |
+| Category | Primary Runbook | Specialist / Escalation Owner |
 | --- | --- | --- |
 | VPN | RB-001 | IT 인프라팀 |
 | MFA | RB-002 | IAM팀 |
@@ -116,15 +118,27 @@ IAM팀
 | SaaS Access | RB-007 | IT 헬프데스크 |
 | Security | RB-008 | 보안팀 |
 | Backup / Recovery | RB-009 | 백업/스토리지팀 |
-| Hardware | RB-010 | 장비지원팀 |
+| Hardware | RB-011 | 장비지원팀 |
 | General Escalation | RB-010 | IT 헬프데스크 |
 
-RB-010은 표준 category Runbook으로 해결할 수 없는 이슈와 hardware 초기
-분류에서 영향도, 증거, 인계 정보를 정리하는 공통 escalation 정책이다.
+RB-010은 표준 category로 명확히 분류할 수 없는 이슈의 영향도, 증거, 인계
+정보를 정리하는 공통 escalation 정책이다. Hardware issue는 장비 기본 점검과
+교체/수리 조건을 포함한 RB-011을 검색해야 한다. 표의 owner는 전문 조치가
+필요할 때의 인계 대상이며, `expected_escalation = false`인 개별 case의 owner는
+`IT 헬프데스크`다.
 
 ## 5. Escalation and Missing Information
 
-`expected_escalation`은 아래 중 하나에 해당하면 true를 우선 고려한다.
+`expected_escalation`은 severity의 다른 이름이 아니다. 이 값은 1차 IT
+헬프데스크가 직접 처리할 수 있는지, 전문 담당 팀 또는 상위 대응 프로세스로
+전달해야 하는지를 나타낸다.
+
+- `false`: 1차 헬프데스크가 표준 Runbook과 승인된 권한으로 직접 처리한다.
+  `expected_owner_team`은 `IT 헬프데스크`다.
+- `true`: 네트워크, IAM, 보안, 장비, 백업 등 전문팀의 조사/변경 또는 상위
+  incident 대응이 필요하다. `expected_owner_team`은 실제 인계 대상이다.
+
+아래 중 하나에 해당하면 true를 우선 고려한다.
 
 - 다수 사용자 또는 핵심 서비스에 동일 증상이 발생
 - 보안 침해, 의심 로그인, 계정 탈취 가능성
@@ -133,10 +147,10 @@ RB-010은 표준 category Runbook으로 해결할 수 없는 이슈와 hardware 
 - SLA 위반 위험 또는 소유 팀이 헬프데스크 범위를 벗어남
 
 `expected_missing_info`는 issue 본문에 없는 정보만 기록한다. 빈 배열은
-현재 설명만으로 초기 Runbook 선택과 다음 조치가 가능함을 뜻하며,
-모든 기술 정보가 완전하다는 뜻은 아니다.
+현재 설명에 Runbook 선택과 다음 조치에 필요한 정보가 충분히 포함된
+complete-information case를 뜻한다.
 
-## 6. v0 Composition
+## 6. Dataset Composition
 
 총 30개 case의 목표 category 분포:
 
@@ -158,6 +172,21 @@ severity, escalation, missing information, single/multiple-user impact를 섞는
 각 case는 적어도 하나의 reference source를 기록하지만, 이는 원문 provenance가
 아니라 어떤 구조적 패턴을 참고했는지를 나타낸다.
 
+### v1 Distribution
+
+v1의 실제 분포는 다음과 같다.
+
+| Dimension | Distribution |
+| --- | --- |
+| Severity | Low 9, Medium 8, High 9, Critical 4 |
+| Escalation | true 15, false 15 |
+| Missing information | 빈 배열 7, 누락 항목 있음 23 |
+| Runbook | RB-001~RB-009, RB-011은 category별 사용, RB-010은 General Escalation 1건 |
+
+Critical은 성공한 계정 침해, 전사 DNS 중단, 고권한 자격 증명 노출, 핵심
+백업 연속 실패처럼 즉시 대응이 필요한 case에 제한한다. complete-information
+case는 VPN, MFA, Email, Network, SaaS Access, Security category에 포함한다.
+
 ## 7. Quality and Validation Rules
 
 - 모든 자연어 필드는 한국어로 작성한다.
@@ -167,4 +196,4 @@ severity, escalation, missing information, single/multiple-user impact를 섞는
 - 정답 label이 description에 그대로 노출되지 않도록 하되 판단 근거는 제공한다.
 - 서로 다른 case가 같은 문장 템플릿의 숫자만 바꾼 형태가 되지 않게 한다.
 - 원본 reference row, 인명, 이메일, URL, IP를 복사하지 않는다.
-- v0는 수동 검토 전제의 초안이며 production benchmark로 간주하지 않는다.
+- v0와 v1은 수동 검토 전제의 초안이며 production benchmark로 간주하지 않는다.

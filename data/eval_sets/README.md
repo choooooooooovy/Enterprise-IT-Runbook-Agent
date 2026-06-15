@@ -1,9 +1,14 @@
 # Korean IT Synthetic Issue/Eval Set
 
-`korean_it_issues_v0.jsonl`은 Enterprise IT Runbook Agent의 초기 동작을
-평가하기 위한 한국어 합성 issue set이다. 실제 사용자 ticket이나 Hugging Face
-원본 행을 번역한 데이터가 아니며, 현실적인 helpdesk 패턴을 참고해 프로젝트
-용도에 맞게 새로 작성한 v0 draft다.
+이 폴더는 Enterprise IT Runbook Agent의 초기 동작을 평가하기 위한 한국어
+합성 issue set을 담는다.
+
+- `korean_it_issues_v0.jsonl`: 최초 baseline 30건
+- `korean_it_issues_v1.jsonl`: Hardware Runbook 매핑과 severity, escalation,
+  missing-information 분포를 정제한 30건
+
+실제 사용자 ticket이나 Hugging Face 원본 행을 번역한 데이터가 아니며,
+현실적인 helpdesk 패턴을 참고해 프로젝트 용도에 맞게 새로 작성한 draft다.
 
 구조 참고에 사용한 reference dataset:
 
@@ -15,6 +20,17 @@
 escalation 판단, owner team routing, JSON schema 준수를 평가한다. 각 case의
 `expected_*` 값은 정답 label 초안이며 `reference_sources`는 원문 provenance가
 아니라 구조적 패턴을 참고한 출처를 뜻한다.
+
+`expected_escalation`은 심각도 자체가 아니라 1차 IT 헬프데스크가 직접 처리할
+수 있는지 여부다. `false`이면 `IT 헬프데스크`가 표준 절차로 처리하고,
+`true`이면 `expected_owner_team`의 전문팀 또는 상위 대응 프로세스로 전달한다.
+
+v1 실제 분포:
+
+- Severity: Low 9, Medium 8, High 9, Critical 4
+- Escalation: true 15, false 15
+- Complete information: `expected_missing_info = []` 7건
+- Hardware: 2건 모두 `RB-011 장비 및 하드웨어 장애 대응 Runbook`에 매핑
 
 현재 한계:
 
@@ -28,4 +44,5 @@ escalation 판단, owner team routing, JSON schema 준수를 평가한다. 각 c
 
 ```bash
 python scripts/validate_synthetic_dataset.py
+python scripts/validate_synthetic_dataset.py --file data/eval_sets/korean_it_issues_v0.jsonl
 ```
